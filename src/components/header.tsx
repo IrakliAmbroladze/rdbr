@@ -1,14 +1,17 @@
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
   return (
     <div className="flex justify-between ">
-      <button className="cursor-pointer">Logo</button>
+      <Link href="/" className="cursor-pointer">
+        Logo
+      </Link>
       <div className="flex gap-1">
         <button className="border cursor-pointer">თანამშრომლის შექმნა</button>
-        <button className="border cursor-pointer">
+        <Link href="/create-task" className="border cursor-pointer">
           + შექმენი ახალი დავალება
-        </button>
+        </Link>
       </div>
     </div>
   );
