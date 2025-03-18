@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import EmployeeModal from "@/components/employee-modal";
 
 const Header = () => {
   return (
@@ -8,7 +9,7 @@ const Header = () => {
         Logo
       </Link>
       <div className="flex gap-1">
-        <button className="border cursor-pointer">თანამშრომლის შექმნა</button>
+        <EmployeeModal />
         <Link href="/create-task" className="border cursor-pointer">
           + შექმენი ახალი დავალება
         </Link>

@@ -7,3 +7,10 @@ export interface Employee {
   avatar: string;
   department: Department;
 }
+
+export interface EmployeeFormData {
+  name: string;
+  surname: string;
+  avatar: File | null;
+  department_id: number;
+}
