@@ -1,5 +1,6 @@
 "use client";
 import { EmployeeFormData } from "@/types/employee";
+import { createEmployee } from "@/utils/create-employee";
 import Image from "next/image";
 import { JSX, useEffect, useState } from "react";
 
@@ -25,21 +26,31 @@ export default function EmployeeForm(): JSX.Element {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, type, value } = e.target;
-    const files = (e.target as HTMLInputElement).files;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "file" && files ? files[0] : value,
-    }));
+    if (type === "file") {
+      const file = (e.target as HTMLInputElement).files?.[0] || null;
+      setFormData((prev) => ({ ...prev, [name]: file }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
     console.log(formData);
+    setIsSubmitting(true);
+    try {
+      await createEmployee(formData);
+      alert("Employee added successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
     setFormData(initialFormData);
+    setPreview(null);
+
+    const fileInput = document.getElementById("avatar") as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
     setIsSubmitting(false);
   };
 
@@ -92,7 +103,7 @@ export default function EmployeeForm(): JSX.Element {
             <label htmlFor="department">დეპარტამენტი*</label>
             <select
               id="department"
-              name="department"
+              name="department_id"
               value={formData.department_id}
               onChange={handleChange}
               required
@@ -112,7 +123,7 @@ export default function EmployeeForm(): JSX.Element {
             isSubmitting ? "bg-gray-300" : "bg-blue-500"
           } text-white p-2 rounded`}
         >
-          {isSubmitting ? "Submitting..." : "Submit Invoice"}
+          {isSubmitting ? "Adding Employee..." : "Add Employee"}
         </button>
       </form>
     </div>
