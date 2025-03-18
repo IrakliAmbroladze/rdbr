@@ -1,26 +1,14 @@
+import { Department } from "@/types/department";
+import { Status } from "@/types/status";
+import { Priority } from "@/types/priority";
+import { Employee } from "@/types/employee";
 export interface Task {
   id: number;
   name: string;
   description: string;
   due_date: string;
-  status: {
-    id: number;
-    name: string;
-  };
-  priority: {
-    id: number;
-    name: string;
-    icon: string;
-  };
-  department: {
-    id: number;
-    name: string;
-  };
-  employee: {
-    id: number;
-    name: string;
-    surname: string;
-    avatar: string;
-    department_id: number;
-  };
+  department: Department;
+  employee: Employee;
+  status: Status;
+  priority: Priority;
 }
