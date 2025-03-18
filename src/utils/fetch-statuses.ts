@@ -2,7 +2,7 @@ import { Status } from "@/types/status";
 
 export const fetchStatuses = async (): Promise<Status[] | null> => {
   try {
-    const response = await fetch(`${process.env.SERVER}/statuses`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/statuses`);
     if (!response.ok) {
       throw new Error("Failed to fetch statuses");
     }

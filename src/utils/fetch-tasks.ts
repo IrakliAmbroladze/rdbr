@@ -2,10 +2,10 @@ import { Task } from "@/types/task";
 
 export const fetchTasks = async (): Promise<Task[] | null> => {
   try {
-    const response = await fetch(`${process.env.SERVER}/tasks`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/tasks`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${process.env.Token}`,
+        Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
       },
     });
     if (!response.ok) {

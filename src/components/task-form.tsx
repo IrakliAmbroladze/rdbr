@@ -13,6 +13,7 @@ const TaskForm = () => {
     employee_id: 0,
   };
   const [formData, setFormData] = useState<Task_Form>(initialFormData);
+  // const token = process.env.NEXT_TOKEN;
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -33,7 +34,22 @@ const TaskForm = () => {
   ) => {
     e.preventDefault();
 
-    setFormData(initialFormData);
+    const response = await fetch("/api/tasks/create-task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert("Task created successfully!");
+      setFormData(initialFormData);
+    } else {
+      alert("Error: " + result.error);
+    }
+
     console.log("Form Data:", formData);
   };
 
