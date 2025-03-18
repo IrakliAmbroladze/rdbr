@@ -1,9 +1,8 @@
 import { Status } from "@/types/status";
 
 export const fetchStatuses = async (): Promise<Status[] | null> => {
-  const url = "https://momentum.redberryinternship.ge/api/statuses";
   try {
-    const response = await fetch(url);
+    const response = await fetch(`${process.env.SERVER}/statuses`);
     if (!response.ok) {
       throw new Error("Failed to fetch statuses");
     }

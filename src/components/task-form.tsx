@@ -1,18 +1,18 @@
 "use client";
 
+import { Task_Form } from "@/types/task";
 import React, { useState } from "react";
 
 const TaskForm = () => {
-  const initialFormData = {
-    title: "",
+  const initialFormData: Task_Form = {
+    name: "",
     description: "",
-    priority: "საშუალო",
-    status: "დასაწყები",
-    department: "დიზაინის დეპარტამენტი",
-    employee: "",
-    delivery_date: "",
+    due_date: "",
+    priority_id: 2,
+    status_id: 1,
+    employee_id: 0,
   };
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<Task_Form>(initialFormData);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -22,7 +22,9 @@ const TaskForm = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: ["priority_id", "status_id", "employee_id"].includes(name)
+        ? Number(value)
+        : value,
     }));
   };
 
@@ -38,15 +40,15 @@ const TaskForm = () => {
   return (
     <div>
       <form onSubmit={handleSubmit} className="flex flex-col p-5">
-        <label htmlFor="title">სათაური*</label>
+        <label htmlFor="name">სათაური*</label>
         <input
           type="text"
-          id="title"
-          name="title"
-          value={formData.title}
+          id="name"
+          name="name"
+          value={formData.name}
           onChange={handleChange}
           className="border-2 border-gray-300 rounded-md"
-          aria-label="Enter title"
+          aria-label="Enter name"
           required
         />
         <br />
@@ -60,33 +62,33 @@ const TaskForm = () => {
           aria-label="Enter description"
         />
         <br />
-        <label htmlFor="priority">პრიორიტეტი*</label>
+        <label htmlFor="priority_id">პრიორიტეტი*</label>
         <select
-          id="priority"
-          name="priority"
-          defaultValue="საშუალო"
+          id="priority_id"
+          name="priority_id"
+          value={formData.priority_id}
           onChange={handleChange}
           required
           className="w-full p-2 border rounded"
         >
-          <option value="დაბალი">დაბალი</option>
-          <option value="საშუალო">საშუალო</option>
-          <option value="მაღალი">მაღალი</option>
+          <option value="1">დაბალი</option>
+          <option value="2">საშუალო</option>
+          <option value="3">მაღალი</option>
         </select>
         <br />
-        <label htmlFor="status">სტატუსი*</label>
+        <label htmlFor="status_id">სტატუსი*</label>
         <select
-          id="status"
-          name="status"
-          defaultValue="დასაწყები"
+          id="status_id"
+          name="status_id"
+          value={formData.status_id}
           onChange={handleChange}
           required
           className="w-full p-2 border rounded"
         >
-          <option value="დასაწყები">დასაწყები</option>
-          <option value="პროგრესში">პროგრესში</option>
-          <option value="მზად ტესტირებისთვის">მზად ტესტირებისთვის</option>
-          <option value="დასრულებული">დასრულებული</option>
+          <option value="1">დასაწყები</option>
+          <option value="2">პროგრესში</option>
+          <option value="3">მზად ტესტირებისთვის</option>
+          <option value="4">დასრულებული</option>
         </select>
         <br />
         <label htmlFor="department">დეპარტამენტი*</label>
@@ -104,24 +106,24 @@ const TaskForm = () => {
           <option value="დიზაინის დეპარტამენტი">დიზაინის დეპარტამენტი</option>
         </select>
         <br />
-        <label htmlFor="employee">პასუხისმგებელი თანამშრომელი*</label>
+        <label htmlFor="employee_id">პასუხისმგებელი თანამშრომელი*</label>
         <select
-          id="employee"
-          name="employee"
+          id="employee_id"
+          name="employee_id"
           onChange={handleChange}
+          value={formData.employee_id}
           required
           className="w-full p-2 border rounded"
         >
-          <option value=""></option>
-          <option value="თანამშრომელი1">თანამშრომელი1</option>
-          <option value="თანამშრომელი2">თანამშრომელი2</option>
+          <option value={0}></option>
+          <option value={1170}>ირაკლი ამბროლაძე</option>
         </select>
         <br />
         <label htmlFor="delivery-date">დედლაინი</label>
         <input
-          name="delivery_date"
+          name="due_date"
           type="date"
-          value={formData.delivery_date}
+          value={formData.due_date}
           onChange={handleChange}
           className="w-full p-2 border rounded"
         />

@@ -12,3 +12,11 @@ export interface Task {
   status: Status;
   priority: Priority;
 }
+export interface Task_Form {
+  name: string;
+  description: string;
+  due_date: string;
+  status_id: number;
+  employee_id: number;
+  priority_id: number;
+}
