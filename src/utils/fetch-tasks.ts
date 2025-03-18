@@ -9,7 +9,6 @@ export const fetchTasks = async (): Promise<Task[] | null> => {
       headers: {
         Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
       },
-      cache: "no-store",
     });
 
     if (!response.ok) {

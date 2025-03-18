@@ -1,6 +1,7 @@
 import { Task } from "@/types/task";
 import React, { JSX } from "react";
 import { fetchStatuses } from "@/utils/fetch-statuses";
+import Link from "next/link";
 
 const TasksList = async ({
   tasks,
@@ -20,9 +21,14 @@ const TasksList = async ({
             <h2 className="font-bold">{status.name}</h2>
             <ul>
               {tasks.map((task) => (
-                <li key={task.id} className="p-2">
-                  <div>{task.name}</div>
-                  {task.description}
+                <li key={task.id}>
+                  <Link
+                    href={`/${task.id}`}
+                    className="block p-2 hover:bg-gray-200 rounded-md"
+                  >
+                    <div>{task.name}</div>
+                    {task.description}
+                  </Link>
                 </li>
               ))}
             </ul>
