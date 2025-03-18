@@ -1,19 +1,22 @@
 "use client";
 
 import { Task_Form } from "@/types/task";
+import { createTask } from "@/utils/create-task";
+
 import React, { useState } from "react";
 
 const TaskForm = () => {
   const initialFormData: Task_Form = {
-    name: "",
-    description: "",
-    due_date: "",
+    name: "შექმენით readme ფაილი",
+    description: "აღწერეთ შესრულებული დავალება რიდმი ფაილით",
+    due_date: new Date(new Date().setDate(new Date().getDate() + 1)) // Sets tomorrow
+      .toISOString()
+      .split("T")[0],
     priority_id: 2,
     status_id: 1,
     employee_id: 0,
   };
   const [formData, setFormData] = useState<Task_Form>(initialFormData);
-  // const token = process.env.NEXT_TOKEN;
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -33,24 +36,16 @@ const TaskForm = () => {
     e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
   ) => {
     e.preventDefault();
-
-    const response = await fetch("/api/tasks/create-task", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const result = await response.json();
-    if (response.ok) {
+    try {
+      await createTask(formData);
       alert("Task created successfully!");
-      setFormData(initialFormData);
-    } else {
-      alert("Error: " + result.error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log("Error: " + error.message);
+      } else {
+        console.log("An unknown error occurred.");
+      }
     }
-
-    console.log("Form Data:", formData);
   };
 
   return (
@@ -132,7 +127,7 @@ const TaskForm = () => {
           className="w-full p-2 border rounded"
         >
           <option value={0}></option>
-          <option value={1170}>ირაკლი ამბროლაძე</option>
+          <option value={1224}>ირაკლი ამბროლაძე</option>
         </select>
         <br />
         <label htmlFor="delivery-date">დედლაინი</label>
@@ -142,6 +137,7 @@ const TaskForm = () => {
           value={formData.due_date}
           onChange={handleChange}
           className="w-full p-2 border rounded"
+          required
         />
         <br />
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
