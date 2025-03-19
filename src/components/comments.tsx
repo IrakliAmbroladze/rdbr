@@ -1,15 +1,32 @@
 "use client";
-import { CommentFormData } from "@/types/comment";
+import { CommentFormData, Comment } from "@/types/comment";
 import { createComment } from "@/utils/create-comment";
-import React, { JSX, useState } from "react";
+import { fetchComments } from "@/utils/fetch-comments";
+import React, { JSX, useEffect, useState } from "react";
 
-const CommentArea = ({ id }: { id: number }) => {
+const Comments = ({ id }: { id: number }): JSX.Element => {
   const initialFormData: CommentFormData = {
     text: "",
     parent_id: null,
   };
   const [formData, setFormData] = useState<CommentFormData>(initialFormData);
-  const [comment, setComment] = useState(initialFormData);
+  const [commentList, setCommentList] = useState<Comment[] | null>([]);
+
+  useEffect(() => {
+    const loadComments = async (id: number) => {
+      try {
+        const result = await fetchComments(id);
+        setCommentList(result);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.log("Error: " + error.message);
+        } else {
+          console.log("An unknown error occurred.");
+        }
+      }
+    };
+    loadComments(id);
+  }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -21,9 +38,10 @@ const CommentArea = ({ id }: { id: number }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setComment(formData);
     try {
       await createComment(formData, id);
+      const result = await fetchComments(id);
+      setCommentList(result);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log("Error: " + error.message);
@@ -53,23 +71,11 @@ const CommentArea = ({ id }: { id: number }) => {
           დააკომენტარე
         </button>
       </form>
-      <CommentList comment={comment} />
+      {commentList &&
+        commentList.map((comment) => (
+          <div key={comment.id}>{comment.text}</div>
+        ))}
     </div>
-  );
-};
-const CommentList = ({
-  comment,
-}: {
-  comment: CommentFormData;
-}): JSX.Element => {
-  return <div>{JSON.stringify(comment)}</div>;
-};
-
-const Comments = ({ id }: { id: number }) => {
-  return (
-    <>
-      <CommentArea id={id} />
-    </>
   );
 };
 
