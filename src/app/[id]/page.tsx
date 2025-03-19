@@ -1,3 +1,4 @@
+import Comments from "@/components/comments";
 import { Task } from "@/types/task";
 import React, { JSX } from "react";
 import { fetchTask } from "@/utils/fetch-single-task";
@@ -18,9 +19,14 @@ const SingleTask = async ({
     }
 
     return (
-      <div>
-        {task.name}
-        {task.description}
+      <div className="flex">
+        <div className=" flex-1">
+          <div>{task.name}</div>
+          <div>{task.description}</div>
+        </div>
+        <div className="flex-1 bg-blue-100 ">
+          <Comments />
+        </div>
       </div>
     );
   } catch (error) {
