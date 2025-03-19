@@ -11,6 +11,7 @@ export interface Task {
   employee: Employee;
   status: Status;
   priority: Priority;
+  total_comments: number;
 }
 export interface Task_Form {
   name: string;
