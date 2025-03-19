@@ -24,8 +24,8 @@ const SingleTask = async ({
           <div>{task.name}</div>
           <div>{task.description}</div>
         </div>
-        <div className="flex-1 bg-blue-100 ">
-          <Comments />
+        <div className="flex-1 bg-[#F8F3FEA6] ">
+          <Comments id={id} />
         </div>
       </div>
     );
