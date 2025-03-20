@@ -1,6 +1,6 @@
 import { Status } from "@/types/status";
 
-export const fetchStatuses = async (): Promise<Status[] | null> => {
+export const fetchStatuses = async (): Promise<Status[]> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/statuses`);
     if (!response.ok) {
@@ -10,6 +10,6 @@ export const fetchStatuses = async (): Promise<Status[] | null> => {
     return statuses;
   } catch (error) {
     console.error("Error fetching statuses:", error);
-    return null;
+    return [];
   }
 };
