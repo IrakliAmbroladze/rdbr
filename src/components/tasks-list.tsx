@@ -8,9 +8,13 @@ import DateComponent from "@/components/date";
 const TasksList = async ({
   tasks,
   priorities = [],
+  departments = [],
+  employees = [],
 }: {
   tasks: Task[];
   priorities: number[];
+  departments: number[];
+  employees: number[];
 }): Promise<JSX.Element> => {
   const statuses = await fetchStatuses();
   if (statuses != null) {
@@ -19,7 +23,10 @@ const TasksList = async ({
       tasks: tasks.filter(
         (task) =>
           task.status.id === status.id &&
-          (priorities.length === 0 || priorities.includes(task.priority.id))
+          (priorities.length === 0 || priorities.includes(task.priority.id)) &&
+          (departments.length === 0 ||
+            departments.includes(task.department.id)) &&
+          (employees.length === 0 || employees.includes(task.employee.id))
       ),
     }));
     return (
