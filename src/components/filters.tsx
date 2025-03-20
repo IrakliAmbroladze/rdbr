@@ -6,6 +6,7 @@ import { Employee } from "@/types/employee";
 import { fetchPriorities } from "@/utils/fetch-priorities";
 import { fetchDepartments } from "@/utils/fetch-departments";
 import { fetchEmployees } from "@/utils/fetch-employees";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const filterOptions = ["დეპარტამენტი", "პრიორიტეტი", "თანამშრომელი"];
 
@@ -14,6 +15,31 @@ const Filters = () => {
   const [priorities, setPriorities] = useState<Priority[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
+  ) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    // new form data added to original searchParams
+    formData.forEach((value, key) => {
+      if (params.has(key)) {
+        // Preserve existing values by appending instead of replacing
+        const existingValues = params.getAll(key);
+        if (!existingValues.includes(value as string)) {
+          params.append(key, value as string);
+        }
+      } else {
+        params.set(key, value as string);
+      }
+    });
+
+    // Update the URL with the new search parameters
+    router.push(`?${params.toString()}`);
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -39,7 +65,7 @@ const Filters = () => {
           {openModalIndex === index && (
             <div>
               {openModalIndex === 0 && (
-                <form>
+                <form onSubmit={handleSubmit}>
                   <fieldset>
                     <div className="flex flex-col">
                       {departments.map((department) => (
@@ -62,7 +88,7 @@ const Filters = () => {
                 </form>
               )}
               {openModalIndex === 1 && (
-                <form>
+                <form onSubmit={handleSubmit}>
                   <fieldset>
                     <div className="flex flex-col">
                       {priorities.map((priority) => (
@@ -85,7 +111,7 @@ const Filters = () => {
                 </form>
               )}
               {openModalIndex === 2 && (
-                <form>
+                <form onSubmit={handleSubmit}>
                   <fieldset>
                     <div className="flex flex-col">
                       {employees.map((employee) => (
