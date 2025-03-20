@@ -1,6 +1,8 @@
 "use client";
+import { Department } from "@/types/department";
 import { Priority } from "@/types/priority";
 import { fetchPriorities } from "@/utils/fetch-priorities";
+import { fetchDepartments } from "@/utils/fetch-departments";
 import React, { useEffect, useState } from "react";
 
 const filterOptions = ["დეპარტამენტი", "პრიორიტეტი", "თანამშრომელი"];
@@ -8,13 +10,15 @@ const filterOptions = ["დეპარტამენტი", "პრიორ�
 const Filters = () => {
   const [openModalIndex, setOpenModalIndex] = useState<number | null>(null);
   const [priorities, setPriorities] = useState<Priority[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
 
   useEffect(() => {
-    const loadPriorities = async () => {
+    const loadData = async () => {
       setPriorities(await fetchPriorities());
+      setDepartments(await fetchDepartments());
     };
 
-    loadPriorities();
+    loadData();
   }, []);
 
   return (
@@ -30,6 +34,29 @@ const Filters = () => {
           </button>
           {openModalIndex === index && (
             <div>
+              {openModalIndex === 0 && (
+                <form>
+                  <fieldset>
+                    <div className="flex flex-col">
+                      {departments.map((department) => (
+                        <label key={department.id}>
+                          <input
+                            type="checkbox"
+                            id={department.name}
+                            name="departments"
+                            value={department.id}
+                          />
+                          {department.name}
+                        </label>
+                      ))}
+                    </div>
+
+                    <div>
+                      <button type="submit">არჩევა</button>
+                    </div>
+                  </fieldset>
+                </form>
+              )}
               {openModalIndex === 1 && (
                 <form>
                   <fieldset>
