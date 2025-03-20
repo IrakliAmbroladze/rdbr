@@ -18,73 +18,31 @@ const Filters = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const handleSubmitDeparments = (
-    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
+  const handleSubmit = (
+    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>,
+    filterName: string
   ) => {
     e.preventDefault();
     const params = new URLSearchParams(searchParams.toString());
     const formData = new FormData(e.currentTarget as HTMLFormElement);
-    console.log("formData is: ", formData);
-    console.log("type of formData is: ", typeof formData);
+
     if (Object.keys(formData).length === 0) {
-      params.delete("departments");
+      params.delete(filterName);
     }
+
     formData.forEach((_, key) => {
-      console.log(key);
       params.delete(key);
     });
 
     formData.forEach((value, key) => {
       params.append(key, value as string);
     });
-
     router.push(`?${params.toString()}`);
-  };
-
-  const handleSubmitPriorities = (
-    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
-  ) => {
-    e.preventDefault();
-    const params = new URLSearchParams(searchParams.toString());
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    console.log("formData is: ", formData);
-    console.log("type of formData is: ", typeof formData);
-    if (Object.keys(formData).length === 0) {
-      params.delete("priorities");
-    }
-    formData.forEach((_, key) => {
-      console.log(key);
-      params.delete(key);
-    });
-
-    formData.forEach((value, key) => {
-      params.append(key, value as string);
-    });
-
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleSubmitEmployees = (
-    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
-  ) => {
-    e.preventDefault();
-    const params = new URLSearchParams(searchParams.toString());
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    console.log("formData is: ", formData);
-    console.log("type of formData is: ", typeof formData);
-    if (Object.keys(formData).length === 0) {
-      params.delete("employees");
-    }
-    formData.forEach((_, key) => {
-      console.log(key);
-      params.delete(key);
-    });
-
-    formData.forEach((value, key) => {
-      params.append(key, value as string);
-    });
-
-    router.push(`?${params.toString()}`);
+    setTimeout(() => {
+      if (openModalIndex != null) {
+        setOpenModalIndex(null);
+      }
+    }, 1000);
   };
 
   useEffect(() => {
@@ -96,6 +54,43 @@ const Filters = () => {
 
     loadData();
   }, []);
+
+  const renderFilterModal = (
+    filterType: "departments" | "priorities" | "employees",
+    filterData: Department[] | Priority[] | Employee[],
+    isCheckbox: boolean
+  ) => {
+    return (
+      <form onSubmit={(e) => handleSubmit(e, filterType)}>
+        <fieldset>
+          <div className="flex flex-col">
+            {filterData.map((item) => (
+              <label key={item.id}>
+                <input
+                  type={isCheckbox ? "checkbox" : "radio"}
+                  id={item.id.toString()}
+                  name={filterType}
+                  value={item.id}
+                  defaultChecked={searchParams
+                    .getAll(filterType)
+                    .includes(item.id.toString())}
+                />
+                {isCheckbox
+                  ? item.name
+                  : "surname" in item
+                  ? `${item.name} ${item.surname}`
+                  : item.name}
+              </label>
+            ))}
+          </div>
+
+          <div>
+            <button type="submit">არჩევა</button>
+          </div>
+        </fieldset>
+      </form>
+    );
+  };
 
   return (
     <ul className="flex gap-2.5">
@@ -110,84 +105,12 @@ const Filters = () => {
           </button>
           {openModalIndex === index && (
             <div>
-              {openModalIndex === 0 && (
-                <form onSubmit={handleSubmitDeparments}>
-                  <fieldset>
-                    <div className="flex flex-col">
-                      {departments.map((department) => (
-                        <label key={department.id}>
-                          <input
-                            type="checkbox"
-                            id={department.id.toString()}
-                            name="departments"
-                            value={department.id}
-                            defaultChecked={searchParams
-                              .getAll("departments")
-                              .includes(department.id.toString())}
-                          />
-                          {department.name}
-                        </label>
-                      ))}
-                    </div>
-
-                    <div>
-                      <button type="submit">არჩევა</button>
-                    </div>
-                  </fieldset>
-                </form>
-              )}
-              {openModalIndex === 1 && (
-                <form onSubmit={handleSubmitPriorities}>
-                  <fieldset>
-                    <div className="flex flex-col">
-                      {priorities.map((priority) => (
-                        <label key={priority.id}>
-                          <input
-                            type="checkbox"
-                            id={priority.id.toString()}
-                            name="priorities"
-                            value={priority.id}
-                            defaultChecked={searchParams
-                              .getAll("priorities")
-                              .includes(priority.id.toString())}
-                          />
-                          {priority.name}
-                        </label>
-                      ))}
-                    </div>
-
-                    <div>
-                      <button type="submit">არჩევა</button>
-                    </div>
-                  </fieldset>
-                </form>
-              )}
-              {openModalIndex === 2 && (
-                <form onSubmit={handleSubmitEmployees}>
-                  <fieldset>
-                    <div className="flex flex-col">
-                      {employees.map((employee) => (
-                        <label key={employee.id}>
-                          <input
-                            type="radio"
-                            id={employee.id.toString()}
-                            name="employees"
-                            value={employee.id}
-                            defaultChecked={searchParams
-                              .getAll("employees")
-                              .includes(employee.id.toString())}
-                          />
-                          {employee.name} {employee.surname}
-                        </label>
-                      ))}
-                    </div>
-
-                    <div>
-                      <button type="submit">არჩევა</button>
-                    </div>
-                  </fieldset>
-                </form>
-              )}
+              {openModalIndex === 0 &&
+                renderFilterModal("departments", departments, true)}
+              {openModalIndex === 1 &&
+                renderFilterModal("priorities", priorities, true)}
+              {openModalIndex === 2 &&
+                renderFilterModal("employees", employees, false)}
             </div>
           )}
         </li>
