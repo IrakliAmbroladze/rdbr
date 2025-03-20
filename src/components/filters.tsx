@@ -18,26 +18,72 @@ const Filters = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const handleSubmit = (
+  const handleSubmitDeparments = (
     e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
   ) => {
     e.preventDefault();
     const params = new URLSearchParams(searchParams.toString());
     const formData = new FormData(e.currentTarget as HTMLFormElement);
-    // new form data added to original searchParams
-    formData.forEach((value, key) => {
-      if (params.has(key)) {
-        // Preserve existing values by appending instead of replacing
-        const existingValues = params.getAll(key);
-        if (!existingValues.includes(value as string)) {
-          params.append(key, value as string);
-        }
-      } else {
-        params.set(key, value as string);
-      }
+    console.log("formData is: ", formData);
+    console.log("type of formData is: ", typeof formData);
+    if (Object.keys(formData).length === 0) {
+      params.delete("departments");
+    }
+    formData.forEach((_, key) => {
+      console.log(key);
+      params.delete(key);
     });
 
-    // Update the URL with the new search parameters
+    formData.forEach((value, key) => {
+      params.append(key, value as string);
+    });
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSubmitPriorities = (
+    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
+  ) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    console.log("formData is: ", formData);
+    console.log("type of formData is: ", typeof formData);
+    if (Object.keys(formData).length === 0) {
+      params.delete("priorities");
+    }
+    formData.forEach((_, key) => {
+      console.log(key);
+      params.delete(key);
+    });
+
+    formData.forEach((value, key) => {
+      params.append(key, value as string);
+    });
+
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSubmitEmployees = (
+    e: React.FormEvent<HTMLFormElement | HTMLSelectElement>
+  ) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    console.log("formData is: ", formData);
+    console.log("type of formData is: ", typeof formData);
+    if (Object.keys(formData).length === 0) {
+      params.delete("employees");
+    }
+    formData.forEach((_, key) => {
+      console.log(key);
+      params.delete(key);
+    });
+
+    formData.forEach((value, key) => {
+      params.append(key, value as string);
+    });
+
     router.push(`?${params.toString()}`);
   };
 
@@ -65,7 +111,7 @@ const Filters = () => {
           {openModalIndex === index && (
             <div>
               {openModalIndex === 0 && (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitDeparments}>
                   <fieldset>
                     <div className="flex flex-col">
                       {departments.map((department) => (
@@ -75,6 +121,9 @@ const Filters = () => {
                             id={department.id.toString()}
                             name="departments"
                             value={department.id}
+                            defaultChecked={searchParams
+                              .getAll("departments")
+                              .includes(department.id.toString())}
                           />
                           {department.name}
                         </label>
@@ -88,7 +137,7 @@ const Filters = () => {
                 </form>
               )}
               {openModalIndex === 1 && (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitPriorities}>
                   <fieldset>
                     <div className="flex flex-col">
                       {priorities.map((priority) => (
@@ -98,6 +147,9 @@ const Filters = () => {
                             id={priority.id.toString()}
                             name="priorities"
                             value={priority.id}
+                            defaultChecked={searchParams
+                              .getAll("priorities")
+                              .includes(priority.id.toString())}
                           />
                           {priority.name}
                         </label>
@@ -111,16 +163,19 @@ const Filters = () => {
                 </form>
               )}
               {openModalIndex === 2 && (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitEmployees}>
                   <fieldset>
                     <div className="flex flex-col">
                       {employees.map((employee) => (
                         <label key={employee.id}>
                           <input
-                            type="checkbox"
+                            type="radio"
                             id={employee.id.toString()}
                             name="employees"
                             value={employee.id}
+                            defaultChecked={searchParams
+                              .getAll("employees")
+                              .includes(employee.id.toString())}
                           />
                           {employee.name} {employee.surname}
                         </label>
