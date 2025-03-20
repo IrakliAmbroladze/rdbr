@@ -12,18 +12,12 @@ export default async function Home({
   const { departments } = await searchParams;
   const { employees } = await searchParams;
 
-  const prioritiesArray: number[] =
-    (Array.isArray(priorities) ? priorities : priorities?.split(","))?.map(
-      Number
-    ) || [];
-  const departmentsArray: number[] =
-    (Array.isArray(departments) ? departments : departments?.split(","))?.map(
-      Number
-    ) || [];
-  const employeesArray: number[] =
-    (Array.isArray(employees) ? employees : employees?.split(","))?.map(
-      Number
-    ) || [];
+  const parseToNumberArray = (value: string | string[] | undefined): number[] =>
+    (Array.isArray(value) ? value : value?.split(","))?.map(Number) || [];
+
+  const prioritiesArray = parseToNumberArray(priorities);
+  const departmentsArray = parseToNumberArray(departments);
+  const employeesArray = parseToNumberArray(employees);
 
   const tasks = await fetchTasks();
   return (

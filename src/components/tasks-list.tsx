@@ -17,16 +17,16 @@ const TasksList = async ({
   employees: number[];
 }): Promise<JSX.Element> => {
   const statuses = await fetchStatuses();
+  const matchesFilter = (task: Task) =>
+    (priorities.length === 0 || priorities.includes(task.priority.id)) &&
+    (departments.length === 0 || departments.includes(task.department.id)) &&
+    (employees.length === 0 || employees.includes(task.employee.id));
+
   if (statuses != null) {
     const groupedTasks = statuses.map((status) => ({
       status,
       tasks: tasks.filter(
-        (task) =>
-          task.status.id === status.id &&
-          (priorities.length === 0 || priorities.includes(task.priority.id)) &&
-          (departments.length === 0 ||
-            departments.includes(task.department.id)) &&
-          (employees.length === 0 || employees.includes(task.employee.id))
+        (task) => task.status.id === status.id && matchesFilter(task)
       ),
     }));
     return (
