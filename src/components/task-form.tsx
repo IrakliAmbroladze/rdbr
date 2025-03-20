@@ -9,11 +9,11 @@ const TaskForm = () => {
   const initialFormData: Task_Form = {
     name: "შექმენით readme ფაილი",
     description: "აღწერეთ შესრულებული დავალება რიდმი ფაილით",
-    due_date: new Date(new Date().setDate(new Date().getDate() + 1)) // Sets tomorrow
+    due_date: new Date(new Date().setDate(new Date().getDate() + 1))
       .toISOString()
       .split("T")[0],
-    priority_id: 2,
-    status_id: 1,
+    priority_id: 1,
+    status_id: 2,
     employee_id: 0,
   };
   const [formData, setFormData] = useState<Task_Form>(initialFormData);

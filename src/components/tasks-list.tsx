@@ -7,14 +7,20 @@ import DateComponent from "@/components/date";
 
 const TasksList = async ({
   tasks,
+  priorities = [],
 }: {
   tasks: Task[];
+  priorities: number[];
 }): Promise<JSX.Element> => {
   const statuses = await fetchStatuses();
   if (statuses != null) {
     const groupedTasks = statuses.map((status) => ({
       status,
-      tasks: tasks.filter((task) => task.status.id === status.id),
+      tasks: tasks.filter(
+        (task) =>
+          task.status.id === status.id &&
+          (priorities.length === 0 || priorities.includes(task.priority.id))
+      ),
     }));
     return (
       <div className="grid grid-cols-4 gap-4">
