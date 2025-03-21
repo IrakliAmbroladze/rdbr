@@ -29,6 +29,11 @@ export default function EmployeeForm({
     return () => URL.revokeObjectURL(objectUrl);
   }, [formData.avatar]);
 
+  const validateInput = (value: string) => {
+    const regex = /^[a-zA-Z\u10D0-\u10FF]*$/; // Only Latin & Georgian letters
+    return regex.test(value) && value.length >= 2 && value.length <= 255;
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -72,11 +77,16 @@ export default function EmployeeForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
+    if (!validateInput(formData.name) || !validateInput(formData.surname)) {
+      setError("ფორმა შეიცავს არასწორ მონაცემებს!");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await createEmployee(formData);
-      alert("Employee added successfully!");
+      setError(null);
+      alert("ფორმა წარმატებით გაიგზავნა!");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -163,6 +173,7 @@ export default function EmployeeForm({
               name="avatar"
               accept="image/*"
               onChange={handleChange}
+              required
             />
             {error && <p className="text-red-500 mt-2">{error}</p>}
             {preview && (
