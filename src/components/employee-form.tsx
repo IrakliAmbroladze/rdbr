@@ -1,4 +1,5 @@
 "use client";
+import { Department } from "@/types/department";
 import { EmployeeFormData } from "@/types/employee";
 import { createEmployee } from "@/utils/create-employee";
 import Image from "next/image";
@@ -6,14 +7,16 @@ import { JSX, useEffect, useState } from "react";
 
 export default function EmployeeForm({
   setIsModalOpen,
+  departments,
 }: {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  departments: Department[];
 }): JSX.Element {
   const initialFormData: EmployeeFormData = {
     name: "",
     surname: "",
     avatar: null,
-    department_id: 2,
+    department_id: 1,
   };
   const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<EmployeeFormData>(initialFormData);
@@ -51,6 +54,7 @@ export default function EmployeeForm({
       }
 
       setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
     if (name === "surname" && (regex.test(value) || value === "")) {
       if (value.length === 0) {
@@ -62,6 +66,7 @@ export default function EmployeeForm({
       }
 
       setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
 
     if (type === "file") {
@@ -72,7 +77,9 @@ export default function EmployeeForm({
       }
       setError(null);
       setFormData((prev) => ({ ...prev, [name]: file }));
+      return;
     }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -202,8 +209,11 @@ export default function EmployeeForm({
               required
               className="w-full p-2 border rounded"
             >
-              <option value={1}>ადმინისტრაციის დეპარტამენტი</option>
-              <option value={2}>დიზაინის დეპარტამენტი</option>
+              {departments.map((department) => (
+                <option key={department.id} value={department.id}>
+                  {department.name}
+                </option>
+              ))}
             </select>
             <br />
           </div>

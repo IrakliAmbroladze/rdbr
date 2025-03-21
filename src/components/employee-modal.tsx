@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import EmployeeForm from "@/components/employee-form";
+import { Department } from "@/types/department";
 
-const EmployeeModal = () => {
+const EmployeeModal = ({ departments }: { departments: Department[] }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -42,7 +43,10 @@ const EmployeeModal = () => {
                 X
               </button>
             </div>
-            <EmployeeForm setIsModalOpen={setIsModalOpen} />
+            <EmployeeForm
+              setIsModalOpen={setIsModalOpen}
+              departments={departments}
+            />
           </div>
         </div>
       )}
