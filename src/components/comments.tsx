@@ -71,9 +71,18 @@ const Comments = ({ id }: { id: number }): JSX.Element => {
           დააკომენტარე
         </button>
       </form>
+      <div className="flex my-5 gap-1.5">
+        <div className="font-bold ">კომენტარები</div>
+        <div className="rounded-2xl bg-[#8338EC] text-white px-2.5">
+          {commentList?.length}
+        </div>
+      </div>
       {commentList &&
         commentList.map((comment) => (
-          <div key={comment.id}>{comment.text}</div>
+          <div key={comment.id} className="my-5">
+            <div className="font-bold">{comment.author_nickname}</div>
+            {comment.text}
+          </div>
         ))}
     </div>
   );

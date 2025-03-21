@@ -127,7 +127,7 @@ export default function EmployeeForm({
               value={formData.name}
               onChange={handleChange}
               required
-              className={`w-full p-2 border rounded ${
+              className={`w-full p-2 border rounded transition-colors ${
                 isValidName === null
                   ? "border-gray-400"
                   : isValidName
@@ -144,9 +144,10 @@ export default function EmployeeForm({
                   : "text-red-500"
               }`}
             >
-              <div>min 2 chars</div>
-              <div>max 255 chars</div>
+              <div>მინ 2 სიმბ.</div>
+              <div>მაქს. 255 სიმბ.</div>
             </div>
+
             <label htmlFor="surname">გვარი*</label>
             <input
               type="text"
@@ -155,7 +156,7 @@ export default function EmployeeForm({
               value={formData.surname}
               onChange={handleChange}
               required
-              className={`w-full p-2 border rounded ${
+              className={`w-full p-2 border rounded transition-colors ${
                 isValidSurname === null
                   ? "border-gray-400"
                   : isValidSurname
@@ -172,8 +173,8 @@ export default function EmployeeForm({
                   : "text-red-500"
               }`}
             >
-              <div>min 2 chars</div>
-              <div>max 255 chars</div>
+              <div>მინ 2 სიმბ.</div>
+              <div>მაქს 255 სიმბ.</div>
             </div>
 
             <label htmlFor="avatar">ავატარი*</label>
@@ -184,25 +185,27 @@ export default function EmployeeForm({
               accept="image/*"
               onChange={handleChange}
               required
+              className="w-full p-2 border rounded"
             />
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+
             {preview && (
               <div className="flex flex-col items-center mt-2">
                 <Image
                   src={preview}
                   alt="Avatar Preview"
-                  className="w-40 h-40 rounded"
+                  className="w-20 h-20 rounded"
                   width={900}
                   height={900}
                 />
                 <button
                   onClick={handleDelete}
-                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded"
+                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded transition-transform active:scale-95"
                 >
                   წაშლა
                 </button>
               </div>
             )}
+
             <label htmlFor="department">დეპარტამენტი*</label>
             <select
               id="department"
@@ -218,26 +221,29 @@ export default function EmployeeForm({
                 </option>
               ))}
             </select>
-            <br />
+
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+
+            <div className="flex justify-end gap-5">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-300 p-2 rounded cursor-pointer transition-transform active:scale-95"
+              >
+                გაუქმება
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`p-2 rounded cursor-pointer text-white transition-transform active:scale-95 ${
+                  isSubmitting ? "bg-gray-300" : "bg-blue-500"
+                }`}
+              >
+                {isSubmitting
+                  ? "თანამშრომლის დამატება..."
+                  : "დაამატე თანამშრომელი"}
+              </button>
+            </div>
           </div>
-          <div className="space-y-4"></div>
-        </div>
-        <div className="flex justify-end gap-5">
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className={`bg-gray-300 p-2 rounded cursor-pointer active:scale-95 transition-transform ease-in-out duration-150`}
-          >
-            გაუქმება
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`${
-              isSubmitting ? "bg-gray-300" : "bg-blue-500"
-            } text-white p-2 rounded cursor-pointer active:scale-95 transition-transform ease-in-out duration-150`}
-          >
-            {isSubmitting ? "თანამშრომლის დამატება..." : "დაამატე თანამშრომელი"}
-          </button>
         </div>
       </form>
     </div>

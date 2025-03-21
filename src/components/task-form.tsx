@@ -165,8 +165,8 @@ const TaskForm = ({
                   : "text-red-500"
               }`}
             >
-              <div>min 2 chars</div>
-              <div>max 255 chars</div>
+              <div>მინ. 2 სიმბ.</div>
+              <div>მაქს. 255 სიმბ.</div>
             </div>
             <br />
             <label htmlFor="description">აღწერა</label>
@@ -193,8 +193,8 @@ const TaskForm = ({
                   : "text-red-500"
               }`}
             >
-              <div>min 4 chars</div>
-              <div>max 255 chars</div>
+              <div>მინ. 4 სიმბ.</div>
+              <div>მაქს. 255 სიმბ.</div>
             </div>
             <br />
             <div className="flex">
