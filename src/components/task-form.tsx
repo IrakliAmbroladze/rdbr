@@ -7,7 +7,7 @@ import { Status } from "@/types/status";
 import { Task_Form } from "@/types/task";
 import { createTask } from "@/utils/create-task";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TaskForm = ({
   priorities,
@@ -31,6 +31,16 @@ const TaskForm = ({
     employee_id: 0,
   };
   const [formData, setFormData] = useState<Task_Form>(initialFormData);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem("formData");
+      if (savedData) {
+        setFormData(JSON.parse(savedData));
+      }
+    }
+  }, []);
+
   const [isValidTitle, setisValidTitle] = useState<null | boolean>(null);
   const [isValidDescription, setisValidDescription] = useState<null | boolean>(
     null
@@ -40,8 +50,18 @@ const TaskForm = ({
     null
   );
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem("department");
+      if (savedData) {
+        setSelectedDepartment(Number(savedData));
+      }
+    }
+  }, []);
   const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const departmentId = Number(e.target.value);
+    const { value } = e.target;
+    localStorage.setItem("department", value);
+    const departmentId = Number(value);
     setSelectedDepartment(departmentId);
   };
 
@@ -63,39 +83,34 @@ const TaskForm = ({
 
     const regex = /^[a-zA-Z0-9\u10D0-\u10FF\s]*$/;
 
-    if (name === "name" && (regex.test(value) || value === "")) {
-      if (value.length === 0) {
-        setisValidTitle(null);
-      } else if (value.length < 2 || value.length > 255) {
-        setisValidTitle(false);
-      } else {
-        setisValidTitle(true);
+    setFormData((prevData) => {
+      const newValue = ["priority_id", "status_id", "employee_id"].includes(
+        name
+      )
+        ? Number(value)
+        : value;
+
+      if (name === "name" || name === "description") {
+        if (!regex.test(value) && value !== "") return prevData;
+
+        if (name === "name") {
+          setisValidTitle(
+            value.length === 0 ? null : value.length >= 2 && value.length <= 255
+          );
+        }
+        if (name === "description") {
+          setisValidDescription(
+            value.length === 0 ? null : value.length >= 4 && value.length <= 255
+          );
+        }
       }
 
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      return;
-    }
-    if (name === "description" && (regex.test(value) || value === "")) {
-      if (value.length === 0) {
-        setisValidDescription(null);
-      } else if (value.length < 4 || value.length > 255) {
-        setisValidDescription(false);
-      } else {
-        setisValidDescription(true);
-      }
+      const updatedData = { ...prevData, [name]: newValue };
 
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      return;
-    }
+      localStorage.setItem("formData", JSON.stringify(updatedData));
 
-    if (name !== "name" && name !== "description") {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: ["priority_id", "status_id", "employee_id"].includes(name)
-          ? Number(value)
-          : value,
-      }));
-    }
+      return updatedData;
+    });
   };
 
   const handleSubmit = async (
@@ -107,9 +122,9 @@ const TaskForm = ({
       return;
     }
     try {
-      console.log(formData);
+      localStorage.removeItem("formData");
+      localStorage.removeItem("department");
       await createTask(formData);
-      alert("Task created successfully!");
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log("Error: " + error.message);
@@ -224,6 +239,7 @@ const TaskForm = ({
             <select
               id="department"
               name="department"
+              value={selectedDepartment ? selectedDepartment : 0}
               onChange={handleDepartmentChange}
               required
               className="w-full p-2 border rounded"
