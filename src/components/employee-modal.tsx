@@ -42,7 +42,7 @@ const EmployeeModal = () => {
                 X
               </button>
             </div>
-            <EmployeeForm />
+            <EmployeeForm setIsModalOpen={setIsModalOpen} />
           </div>
         </div>
       )}
