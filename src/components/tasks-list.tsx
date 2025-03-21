@@ -32,17 +32,30 @@ const TasksList = async ({
     return (
       <div className="grid grid-cols-4 gap-4 ">
         {groupedTasks.map(({ status, tasks }, index) => (
-          <div key={index} className="border p-4">
-            <h2 className="font-bold">{status.name}</h2>
+          <div key={index} className="p-4">
+            <h2
+              className={`text-white 
+                ${status.id == 1 && "bg-[#F7BC30]"} 
+                ${status.id == 2 && "bg-[#FB5607]"}
+                ${status.id == 3 && "bg-[#FF006E]"}
+                ${status.id == 4 && "bg-[#3A86FF]"}
+                rounded-lg
+                justify-center
+                text-center
+                p-2.5
+                `}
+            >
+              {status.name}
+            </h2>
             <ul>
               {tasks.map((task) => (
                 <li key={task.id}>
                   <Link
                     href={`/${task.id}`}
-                    className="block p-2 hover:bg-gray-200 rounded-md"
+                    className="block p-2 hover:bg-gray-200 border rounded-2xl my-5 border-[#FB5607] "
                   >
-                    <div className="flex">
-                      <button className="flex border">
+                    <div className="flex justify-between">
+                      <button className="flex border rounded-lg p-1.5">
                         <Image
                           src={task.priority.icon}
                           alt="Priority Icon"
@@ -52,10 +65,13 @@ const TasksList = async ({
 
                         {task.priority.name}
                       </button>
-                      <div>{task.department.name}</div>
+                      <div className="bg-[#FF66A8] text-white rounded-2xl text-center p-1.5">
+                        {task.department.name.slice(0, 10)}{" "}
+                        {task.department.name.length > 10 ? "..." : ""}
+                      </div>
                       <DateComponent date={task.due_date} />
                     </div>
-                    <div>{task.name}</div>
+                    <div className="font-bold my-5">{task.name}</div>
                     {task.description && (
                       <div className="overflow-hidden">
                         {task.description.slice(0, 100)}

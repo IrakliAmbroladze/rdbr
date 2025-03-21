@@ -79,8 +79,8 @@ export default function EmployeeForm({
       setFormData((prev) => ({ ...prev, [name]: file }));
       return;
     }
-    if (name === "department" && (regex.test(value) || value === "")) {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "department_id") {
+      setFormData((prev) => ({ ...prev, [name]: Number(value) }));
       return;
     }
   };

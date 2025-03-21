@@ -25,7 +25,7 @@ const EmployeeModal = ({ departments }: { departments: Department[] }) => {
     <>
       <button
         onClick={() => setIsModalOpen(!isModalOpen)}
-        className="border cursor-pointer"
+        className="border border-[#8338EC] rounded-sm    cursor-pointer  py-2.5 px-5 justify-center items-center"
       >
         თანამშრომლის შექმნა
       </button>

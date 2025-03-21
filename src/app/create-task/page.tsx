@@ -15,15 +15,15 @@ const CreateTask = async () => {
   const departments: Department[] = await fetchDepartments();
   const employees: Employee[] = await fetchEmployees();
   return (
-    <>
-      <div>შექმენი ახალი დავალება</div>
+    <div className="px-[120px]">
+      <div className="text-4xl font-bold mt-36">შექმენი ახალი დავალება</div>
       <TaskForm
         priorities={priorities}
         statuses={statuses}
         departments={departments}
         employees={employees}
       />
-    </>
+    </div>
   );
 };
 

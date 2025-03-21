@@ -63,7 +63,7 @@ const Filters = () => {
     return (
       <form onSubmit={(e) => handleSubmit(e, filterType)}>
         <fieldset>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2.5 mt-2.5">
             {filterData.map((item) => (
               <label key={item.id}>
                 <input
@@ -85,7 +85,12 @@ const Filters = () => {
           </div>
 
           <div>
-            <button type="submit">არჩევა</button>
+            <button
+              type="submit"
+              className="rounded-2xl bg-[#8338EC] text-white px-2.5 py-1.5"
+            >
+              არჩევა
+            </button>
           </div>
         </fieldset>
       </form>
@@ -93,7 +98,7 @@ const Filters = () => {
   };
 
   return (
-    <ul className="flex gap-2.5">
+    <ul className="flex justify-between w-[600px] my-7">
       {filterOptions.map((option, index) => (
         <li key={index} className="cursor-pointer">
           <button
@@ -104,7 +109,7 @@ const Filters = () => {
             {option}
           </button>
           {openModalIndex === index && (
-            <div>
+            <div className="fixed bg-white p-5">
               {openModalIndex === 0 &&
                 renderFilterModal("departments", departments, true)}
               {openModalIndex === 1 &&

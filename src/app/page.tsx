@@ -21,8 +21,8 @@ export default async function Home({
 
   const tasks = await fetchTasks();
   return (
-    <>
-      <div>დავალებების გვერდი</div>
+    <div className="px-[120px]">
+      <div className="text-4xl font-bold mt-36">დავალებების გვერდი</div>
       <Filters />
       {tasks && (
         <TasksList
@@ -32,6 +32,6 @@ export default async function Home({
           employees={employeesArray}
         />
       )}
-    </>
+    </div>
   );
 }
