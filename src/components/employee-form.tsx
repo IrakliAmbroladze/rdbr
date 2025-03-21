@@ -33,7 +33,7 @@ export default function EmployeeForm({
   }, [formData.avatar]);
 
   const validateInput = (value: string) => {
-    const regex = /^[a-zA-Z\u10D0-\u10FF]*$/; // Only Latin & Georgian letters
+    const regex = /^[a-zA-Z\u10D0-\u10FF]*$/;
     return regex.test(value) && value.length >= 2 && value.length <= 255;
   };
 
@@ -79,7 +79,10 @@ export default function EmployeeForm({
       setFormData((prev) => ({ ...prev, [name]: file }));
       return;
     }
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "department" && (regex.test(value) || value === "")) {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

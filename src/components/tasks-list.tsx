@@ -30,7 +30,7 @@ const TasksList = async ({
       ),
     }));
     return (
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-4 ">
         {groupedTasks.map(({ status, tasks }, index) => (
           <div key={index} className="border p-4">
             <h2 className="font-bold">{status.name}</h2>
@@ -56,10 +56,13 @@ const TasksList = async ({
                       <DateComponent date={task.due_date} />
                     </div>
                     <div>{task.name}</div>
-                    <div>
-                      {task.description.slice(0, 100)}
-                      {task.description.length > 100 ? "..." : ""}
-                    </div>
+                    {task.description && (
+                      <div className="overflow-hidden">
+                        {task.description.slice(0, 100)}
+                        {task.description.length > 100 ? "..." : ""}
+                      </div>
+                    )}
+
                     <div className="flex justify-between">
                       <Image
                         src={task.employee.avatar}
